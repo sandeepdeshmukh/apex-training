@@ -1,9 +1,6 @@
 package com.datatorrent.apps;
 
-import com.datatorrent.api.Context;
-import com.datatorrent.api.DefaultInputPort;
-import com.datatorrent.api.DefaultOutputPort;
-import com.datatorrent.api.Operator;
+import com.datatorrent.api.*;
 import com.datatorrent.common.util.BaseOperator;
 import com.datatorrent.lib.util.PojoUtils;
 
@@ -15,6 +12,7 @@ public class Deduper extends BaseOperator implements Operator.ActivationListener
   private transient Class<?> clazz;
   private transient PojoUtils.GetterInt<Object> accountNumber;
   private transient Set<Integer> dedupSet = new HashSet<>();
+  private transient StreamCodec streamCodec;
 
   public final transient DefaultInputPort<Object> input = new DefaultInputPort<Object>()
   {
@@ -28,6 +26,15 @@ public class Deduper extends BaseOperator implements Operator.ActivationListener
     public void setup(Context.PortContext context)
     {
       clazz = context.getAttributes().get(Context.PortContext.TUPLE_CLASS);
+    }
+
+    @Override
+    public StreamCodec<Object> getStreamCodec()
+    {
+      if (streamCodec == null) {
+        streamCodec = new DeduperStreamCodec();
+      }
+      return streamCodec;
     }
   };
 

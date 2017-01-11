@@ -34,7 +34,7 @@
   </property>
   <property>
     <name>dt.operator.fileOutput.prop.filePath</name>
-    <value>/tmp/step3</value>
+    <value>/tmp/step4</value>
   </property>
   <property>
     <name>dt.operator.fileOutput.prop.outputFileName</name>
@@ -96,9 +96,20 @@
     <value>com.datatorrent.apps.PojoEvent</value>
   </property>
 
+  <!-- Step 3 additions -->
   <property>
     <name>dt.operator.deduper.port.input.attr.TUPLE_CLASS</name>
     <value>com.datatorrent.apps.PojoEvent</value>
+  </property>
+
+  <!-- Step 4 additions -->
+  <property>
+    <name>dt.operator.deduper.attr.PARTITIONER</name>
+    <value>com.datatorrent.common.partitioner.StatelessPartitioner:2</value>
+  </property>
+  <property>
+    <name>dt.operator.csvFormatter.port.in.attr.PARTITION_PARALLEL</name>
+    <value>true</value>
   </property>
 </configuration>
 
