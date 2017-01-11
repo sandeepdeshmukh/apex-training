@@ -51,23 +51,23 @@
   <property>
     <name>dt.operator.csvParser.prop.schema</name>
     <value>{
-    "separator": "|",
-    "quoteChar": "\"",
-    "fields": [
+        "separator": "|",
+        "quoteChar": "\"",
+        "fields": [
         {
-            "name": "accountNumber",
-            "type": "Integer"
+        "name": "accountNumber",
+        "type": "Integer"
         },
         {
-            "name": "name",
-            "type": "String"
+        "name": "name",
+        "type": "String"
         },
         {
-            "name": "amount",
-            "type": "Integer"
+        "name": "amount",
+        "type": "Integer"
         }
-      ]
-  }
+        ]
+        }
   </value>
   </property>
   <property>

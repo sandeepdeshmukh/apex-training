@@ -34,11 +34,66 @@
   </property>
   <property>
     <name>dt.operator.fileOutput.prop.filePath</name>
-    <value>/tmp</value>
+    <value>/tmp/step2</value>
   </property>
   <property>
     <name>dt.operator.fileOutput.prop.outputFileName</name>
     <value>output.txt</value>
+  </property>
+
+  <!-- Step 2 addition of properties -->
+  <property>
+    <name>dt.operator.csvParser.prop.schema</name>
+    <value>{
+      "separator": "|",
+      "quoteChar": "\"",
+      "fields": [
+        {
+          "name": "accountNumber",
+          "type": "Integer"
+        },
+        {
+          "name": "name",
+          "type": "String"
+        },
+        {
+          "name": "amount",
+          "type": "Integer"
+        }
+      ]
+    }
+    </value>
+  </property>
+  <property>
+    <name>dt.operator.csvParser.port.out.attr.TUPLE_CLASS</name>
+    <value>com.datatorrent.apps.PojoEvent</value>
+  </property>
+  <property>
+    <name>dt.operator.csvFormatter.prop.schema</name>
+    <value>{
+      "separator": "|",
+      "quoteChar": "\"",
+      "lineDelimiter": "",
+      "fields": [
+        {
+          "name": "accountNumber",
+          "type": "Integer"
+        },
+        {
+          "name": "name",
+          "type": "String"
+        },
+        {
+          "name": "amount",
+          "type": "Integer"
+        }
+      ]
+    }
+    </value>
+  </property>
+  <property>
+    <name>dt.operator.csvFormatter.port.in.attr.TUPLE_CLASS</name>
+    <value>com.datatorrent.apps.PojoEvent</value>
   </property>
 </configuration>
 
