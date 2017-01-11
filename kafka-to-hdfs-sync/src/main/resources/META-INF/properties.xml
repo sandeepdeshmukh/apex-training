@@ -30,7 +30,7 @@
   </property>
   <property>
     <name>dt.operator.kafkaInput.prop.initialOffset</name>
-    <value>EARLIEST</value>
+    <value>LATEST</value>
   </property>
   <property>
     <name>dt.operator.fileOutput.prop.filePath</name>
@@ -103,13 +103,14 @@
   </property>
 
   <!-- Step 4 additions -->
-  <property>
-    <name>dt.operator.deduper.attr.PARTITIONER</name>
-    <value>com.datatorrent.common.partitioner.StatelessPartitioner:2</value>
-  </property>
-  <property>
-    <name>dt.operator.csvFormatter.port.in.attr.PARTITION_PARALLEL</name>
-    <value>true</value>
-  </property>
+  <!--<property>-->
+    <!--<name>dt.operator.deduper.attr.PARTITIONER</name>-->
+    <!--<value>com.datatorrent.common.partitioner.StatelessPartitioner:2</value>-->
+  <!--</property>-->
+  <!--<property>-->
+    <!--<name>dt.operator.csvFormatter.port.in.attr.PARTITION_PARALLEL</name>-->
+    <!--<value>true</value>-->
+  <!--</property>-->
+
 </configuration>
 

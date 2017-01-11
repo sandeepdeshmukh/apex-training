@@ -25,3 +25,16 @@ Here is a preview of the properties to be set at application launch
 Please find the walkthrough docs for app template as follows:
 
 &nbsp; <a href="http://docs.datatorrent.com/app-templates/kafka-to-hdfs-sync"  class="docs" id="docs" ga-track="docs" target="_blank">http://docs.datatorrent.com/app-templates/kafka-to-hdfs-sync</a>
+
+### Dynamic Partitioning of Deduper
+
+This application enables the dedup operator to dynamically scale depending on the incoming load.
+In this case it repartitions based on latency. There are parameters to adapt partitioning depending on latency:
+1. latencyLowerBound - default = 1ms
+2. latencyUpperBound - default = 10ms
+If the latency of some operator goes above _latencyUpperBound_, then the number of partitions are increased to 2 (MAX_PARTITIONS)
+If the latency of some operator goes below _latencyLowerBound_, then the number of partitions are decreased to 1 (MIN_PARTITIONS)
+
+The cool off period of 30 secs is also provided so that there is not too much scale up and scale down too fast.
+
+You can configure the above parameters when the app is running to get the desired partitioning effect. 
