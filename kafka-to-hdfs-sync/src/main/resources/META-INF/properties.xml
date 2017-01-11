@@ -34,7 +34,7 @@
   </property>
   <property>
     <name>dt.operator.fileOutput.prop.filePath</name>
-    <value>/tmp/step2</value>
+    <value>/tmp/step3</value>
   </property>
   <property>
     <name>dt.operator.fileOutput.prop.outputFileName</name>
@@ -93,6 +93,11 @@
   </property>
   <property>
     <name>dt.operator.csvFormatter.port.in.attr.TUPLE_CLASS</name>
+    <value>com.datatorrent.apps.PojoEvent</value>
+  </property>
+
+  <property>
+    <name>dt.operator.deduper.port.input.attr.TUPLE_CLASS</name>
     <value>com.datatorrent.apps.PojoEvent</value>
   </property>
 </configuration>

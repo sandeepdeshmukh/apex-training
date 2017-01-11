@@ -37,12 +37,14 @@ public class Application implements StreamingApplication
     KafkaSinglePortInputOperator kafkaInputOperator = dag.addOperator("kafkaInput", KafkaSinglePortInputOperator.class);
 
     CsvParser parser = dag.addOperator("csvParser", CsvParser.class);
+    Deduper deduper = dag.addOperator("deduper", Deduper.class);
     CsvFormatter formatter = dag.addOperator("csvFormatter", CsvFormatter.class);
 
     StringFileOutputOperator fileOutput = dag.addOperator("fileOutput", StringFileOutputOperator.class);
 
     dag.addStream("toParser", kafkaInputOperator.outputPort, parser.in);
-    dag.addStream("toFormatter", parser.out, formatter.in);
+    dag.addStream("toDedup", parser.out, deduper.input);
+    dag.addStream("toFormatter", deduper.unique, formatter.in);
     dag.addStream("toHDFS", formatter.out, fileOutput.input);
   }
 
