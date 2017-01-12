@@ -19,14 +19,20 @@
 
 package com.datatorrent.apps;
 
+import java.util.Arrays;
+
+import org.apache.apex.malhar.kafka.KafkaSinglePortInputOperator;
+import org.apache.apex.malhar.lib.fs.GenericFileOutputOperator.StringFileOutputOperator;
+import org.apache.hadoop.conf.Configuration;
+
+import com.datatorrent.api.Context;
 import com.datatorrent.api.DAG;
+import com.datatorrent.api.StatsListener;
 import com.datatorrent.api.StreamingApplication;
 import com.datatorrent.api.annotation.ApplicationAnnotation;
 import com.datatorrent.contrib.formatter.CsvFormatter;
 import com.datatorrent.contrib.parser.CsvParser;
-import org.apache.apex.malhar.kafka.KafkaSinglePortInputOperator;
-import org.apache.apex.malhar.lib.fs.GenericFileOutputOperator.StringFileOutputOperator;
-import org.apache.hadoop.conf.Configuration;
+import com.datatorrent.lib.partitioner.StatelessThroughputBasedPartitioner;
 
 @ApplicationAnnotation(name = "Kafka-to-HDFS-Sync")
 public class Application implements StreamingApplication
@@ -46,6 +52,14 @@ public class Application implements StreamingApplication
     dag.addStream("toDedup", parser.out, deduper.input);
     dag.addStream("toFormatter", deduper.unique, formatter.in);
     dag.addStream("toHDFS", formatter.out, fileOutput.input);
+
+    StatelessThroughputBasedPartitioner<CsvParser> partitioner = new StatelessThroughputBasedPartitioner<>();
+    partitioner.setInitialPartitionCount(1);
+    partitioner.setMinimumEvents(10);
+    partitioner.setMaximumEvents(100);
+    partitioner.setCooldownMillis(30000);
+    dag.setAttribute(parser, Context.OperatorContext.STATS_LISTENERS, Arrays.asList(new StatsListener[]{partitioner}));
+    dag.setAttribute(parser, Context.OperatorContext.PARTITIONER, partitioner);
   }
 
 }
