@@ -33,6 +33,12 @@
     <value>EARLIEST</value>
   </property>
   <property>
+    <name>dt.operator.kafkaInput.prop.maxTuplesPerWindow</name>
+    <value>1000</value>
+  </property>
+
+
+  <property>
     <name>dt.operator.fileOutput.prop.filePath</name>
     <value>/tmp/step3</value>
   </property>

@@ -1,4 +1,4 @@
-package com.datatorrent.apps;
+package com.datatorrent.apps.solution;
 
 import com.datatorrent.api.Context;
 import com.datatorrent.api.DefaultInputPort;

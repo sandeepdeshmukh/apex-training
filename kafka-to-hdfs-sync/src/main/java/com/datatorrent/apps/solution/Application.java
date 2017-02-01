@@ -17,7 +17,7 @@
  * under the License.
  */
 
-package com.datatorrent.apps;
+package com.datatorrent.apps.solution;
 
 import com.datatorrent.api.DAG;
 import com.datatorrent.api.StreamingApplication;
@@ -28,21 +28,23 @@ import org.apache.apex.malhar.kafka.KafkaSinglePortInputOperator;
 import org.apache.apex.malhar.lib.fs.GenericFileOutputOperator.StringFileOutputOperator;
 import org.apache.hadoop.conf.Configuration;
 
-@ApplicationAnnotation(name = "Dedup")
+@ApplicationAnnotation(name = "Dedup-solution")
 public class Application implements StreamingApplication
 {
 
   public void populateDAG(DAG dag, Configuration conf)
   {
-	  // Add operators
     KafkaSinglePortInputOperator kafkaInputOperator = dag.addOperator("kafkaInput", KafkaSinglePortInputOperator.class);
+
     CsvParser parser = dag.addOperator("csvParser", CsvParser.class);
+    Deduper deduper = dag.addOperator("deduper", Deduper.class);
     CsvFormatter formatter = dag.addOperator("csvFormatter", CsvFormatter.class);
+
     StringFileOutputOperator fileOutput = dag.addOperator("fileOutput", StringFileOutputOperator.class);
 
-    // Connect operators.
     dag.addStream("toParser", kafkaInputOperator.outputPort, parser.in);
-    dag.addStream("toFormatter", parser.out, formatter.in);
+    dag.addStream("toDedup", parser.out, deduper.input);
+    dag.addStream("toFormatter", deduper.unique, formatter.in);
     dag.addStream("toHDFS", formatter.out, fileOutput.input);
   }
 
