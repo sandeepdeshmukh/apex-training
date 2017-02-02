@@ -19,14 +19,16 @@
 
 package com.datatorrent.apps;
 
+import org.apache.apex.malhar.kafka.KafkaSinglePortInputOperator;
+import org.apache.apex.malhar.lib.fs.GenericFileOutputOperator.StringFileOutputOperator;
+import org.apache.hadoop.conf.Configuration;
+
 import com.datatorrent.api.DAG;
 import com.datatorrent.api.StreamingApplication;
 import com.datatorrent.api.annotation.ApplicationAnnotation;
 import com.datatorrent.contrib.formatter.CsvFormatter;
 import com.datatorrent.contrib.parser.CsvParser;
-import org.apache.apex.malhar.kafka.KafkaSinglePortInputOperator;
-import org.apache.apex.malhar.lib.fs.GenericFileOutputOperator.StringFileOutputOperator;
-import org.apache.hadoop.conf.Configuration;
+import com.datatorrent.lib.io.ConsoleOutputOperator;
 
 @ApplicationAnnotation(name = "Dedup")
 public class Application implements StreamingApplication
@@ -40,11 +42,13 @@ public class Application implements StreamingApplication
     Dedup dedup = dag.addOperator("dedup", Dedup.class);
     CsvFormatter formatter = dag.addOperator("csvFormatter", CsvFormatter.class);
     StringFileOutputOperator fileOutput = dag.addOperator("fileOutput", StringFileOutputOperator.class);
+    ConsoleOutputOperator console = dag.addOperator("Console", ConsoleOutputOperator.class);
 
     // Connect operators.
     dag.addStream("toParser", kafkaInputOperator.outputPort, parser.in);
     dag.addStream("toDedup", parser.out, dedup.input);
-    dag.addStream("toFormatter", dedup.output, formatter.in);
+    dag.addStream("toFormatter", dedup.unique, formatter.in);
+    dag.addStream("toConsole", dedup.duplicate, console.input);
     dag.addStream("toHDFS", formatter.out, fileOutput.input);
   }
 
