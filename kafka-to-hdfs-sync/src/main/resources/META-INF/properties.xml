@@ -30,7 +30,7 @@
   </property>
   <property>
     <name>dt.operator.kafkaInput.prop.initialOffset</name>
-    <value>EARLIEST</value>
+    <value>LATEST</value>
   </property>
   <property>
     <name>dt.operator.kafkaInput.prop.maxTuplesPerWindow</name>
@@ -103,8 +103,8 @@
   </property>
 
   <property>
-    <name>dt.operator.deduper.port.input.attr.TUPLE_CLASS</name>
-    <value>com.datatorrent.apps.PojoEvent</value>
+    <name>dt.operator.dedup.attr.PARTITIONER</name>
+    <value>com.datatorrent.common.partitioner.StatelessPartitioner:1</value>
   </property>
 </configuration>
 
