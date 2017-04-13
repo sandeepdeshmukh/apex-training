@@ -38,4 +38,16 @@ launch target/myapexapp-1.0-SNAPSHOT.apa
 
 2. Monitor an application - Logical, Physical, Physical DAG, Metrics, Attempts.
 
+### Change few parameters/properties to make it unique during the training
 
+1. Change in Application.java @ApplicationAnnotation to dedup-your-name
+1. Change in pom.xml artifactid to dedup-your-name
+
+Compile and run again.
+
+### Setup cluster environment for running the application
+1. Setup SSH key
+1. Login to remote cluster and create a personal folder
+1. rsync using ssh your code within that folder 
+1. Compile and run the application on remote cluster
+1. Access dtConsole and verify that the app is running successfully
