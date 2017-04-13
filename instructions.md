@@ -32,9 +32,9 @@ launch target/myapexapp-1.0-SNAPSHOT.apa
 
 ### Go through the DTConsole
 1. Run through the monitor console
-..* Main monitor page 
-..* Cluster Overview
-..* DataTorrent Applications
+  * Main monitor page 
+  * Cluster Overview
+  * DataTorrent Applications
 
 2. Monitor an application - Logical, Physical, Physical DAG, Metrics, Attempts.
 
