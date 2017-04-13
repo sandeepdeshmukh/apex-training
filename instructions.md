@@ -36,7 +36,12 @@ launch target/myapexapp-1.0-SNAPSHOT.apa
   * Cluster Overview
   * DataTorrent Applications
 
-2. Monitor an application - Logical, Physical, Physical DAG, Metrics, Attempts.
+2. Monitor an application
+  * Logical
+  * Physical
+  * Physical DAG
+  * Metrics
+  * Attempts
 
 ### Change few parameters/properties to make it unique during the training
 
@@ -49,6 +54,7 @@ Compile and run again.
 1. Setup SSH key
 1. Login to remote cluster and create a personal folder
 1. rsync using ssh your code within that folder 
-..* rsync -v -e --exclude  target ssh /home/dtadmin/workspace/apex-training/myapexapp training@X.X.X.X:/home/training/code/your-name
+  * rsync -v -e --exclude  target ssh /home/dtadmin/workspace/apex-training/myapexapp training@X.X.X.X:/home/training/code/your-name
+  * Exclude target folder
 1. Compile and run the application on remote cluster
 1. Access dtConsole and verify that the app is running successfully
