@@ -17,7 +17,7 @@ mvn -B archetype:generate \
 
 ### Compile and verify 
 ```bash
-mvn clean install -DskipTests
+mvn clean package -DskipTests
 ```
 
 ### Folder structure walkthrough
