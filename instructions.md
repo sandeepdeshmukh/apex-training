@@ -1,4 +1,4 @@
-myapexapp-1.0-SNAPSHOT.apaThis is step-by-step guide for the Apex Trainer to conduct hands on sessions.
+This is step-by-step guide for the Apex Trainer to conduct hands on sessions.
 
 # Project creation using archetype
 
@@ -32,4 +32,10 @@ launch target/myapexapp-1.0-SNAPSHOT.apa
 
 ### Go through the DTConsole
 1. Run through the monitor console
-..1.sdfds
+..1. Main monitor page 
+...1. Cluster Overview
+...2. DataTorrent Applications
+
+2. Monitor an application - Logical, Physical, Physical DAG, Metrics, Attempts.
+
+
