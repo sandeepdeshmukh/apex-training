@@ -49,5 +49,6 @@ Compile and run again.
 1. Setup SSH key
 1. Login to remote cluster and create a personal folder
 1. rsync using ssh your code within that folder 
+..1. rsync -v -e --exclude  target ssh /home/dtadmin/workspace/apex-training/myapexapp training@X.X.X.X:/home/training/code/your-name
 1. Compile and run the application on remote cluster
 1. Access dtConsole and verify that the app is running successfully
