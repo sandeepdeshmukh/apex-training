@@ -1,4 +1,4 @@
-This is step-by-step guide for the Apex Trainer to conduct hands on sessions.
+This is step-by-step guide for the Apex Trainer to conduct hands on sessions. A good document to refer would be [Beginners Guide](http://docs.datatorrent.com/beginner/)
 
 # Project creation using archetype
 
