@@ -116,3 +116,11 @@ Compile and run again.
   </property>
 </configuration>
 ```
+
+## Setup kafka 
+For details: [Kafka QuickStart](https://kafka.apache.org/quickstart)
+
+### Send some messages
+```bash
+cat ~/kaf*/sampleData.txt | kafka-console-producer.sh --broker-list localhost:9093 --topic transactions
+```
