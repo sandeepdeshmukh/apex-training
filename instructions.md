@@ -91,3 +91,28 @@ Compile and run again.
   </properties>
 ```
 
+### Add following into the properties.xml file. 
+```diff
+<configuration>
+  <property>
+    <name>dt.operator.kafkaInput.prop.clusters</name>
+    <value>localhost:9092</value>
+  </property> 
+  <property>
+    <name>dt.operator.kafkaInput.prop.topics</name>
+    <value>transactions</value>
+  </property>
+  <property>
+    <name>dt.operator.kafkaInput.prop.initialOffset</name>
+    <value>EARLIEST</value>
+  </property>
+  <property>
+    <name>dt.operator.fileOutput.prop.filePath</name>
+    <value>/tmp</value>
+  </property>
+  <property>
+    <name>dt.operator.fileOutput.prop.outputFileName</name>
+    <value>output.txt</value>
+  </property>
+</configuration>
+```
