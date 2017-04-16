@@ -59,3 +59,35 @@ Compile and run again.
 1. Compile and run the application on remote cluster
 1. Access dtConsole and verify that the app is running successfully
 
+# Writing Kafka to HDFS Sync App
+
+### Add kafka dependency in pom.xml
+```bash
+    <dependency>
+      <groupId>org.apache.kafka</groupId>
+      <artifactId>kafka_2.11</artifactId>
+      <version>0.9.0.1</version>
+    </dependency>
+        <dependency>
+      <groupId>org.apache.apex</groupId>
+      <artifactId>malhar-kafka</artifactId>
+      <version>${malhar.version}</version>
+      <exclusions>
+        <exclusion>
+          <groupId>*</groupId>
+          <artifactId>*</artifactId>
+        </exclusion>
+      </exclusions>
+    </dependency>
+```
+
+### Add malhar.version property 
+```diff
+ <properties>
+    <!-- change this if you desire to use a different version of Apex Core -->
+    <apex.version>3.5.0</apex.version>
++    <malhar.version>3.7.0</malhar.version>
+    <apex.apppackage.classpath>lib/*.jar</apex.apppackage.classpath>
+  </properties>
+```
+
