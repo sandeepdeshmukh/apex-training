@@ -51,10 +51,11 @@ launch target/myapexapp-1.0-SNAPSHOT.apa
 Compile and run again.
 
 ### Setup cluster environment for running the application
-1. Setup SSH key
+1. Setup SSH key & config to connect to the cluster
 1. Login to remote cluster and create a personal folder
 1. rsync using ssh your code within that folder 
-  * rsync -avz -e "ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null"  ../myapexapp  training@X.X.X.X:/home/training/code/your-name
+  * rsync -avz -e "ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null"  ../myapexapp  training@X.X.X.X:/home/training/code/your-name (exact command in the workbook)
   * Exclude target folder
 1. Compile and run the application on remote cluster
 1. Access dtConsole and verify that the app is running successfully
+
