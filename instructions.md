@@ -128,12 +128,12 @@ cat ~/kaf*/sampleData.txt | kafka-console-producer.sh --broker-list localhost:90
 ## Change Application.java 
 
 ```diff
-+		// Add operators
-+		KafkaSinglePortInputOperator kafkaInput = dag.addOperator("kafkaInput", KafkaSinglePortInputOperator.class);
-+		BytesFileOutputOperator hdfsOutput = dag.addOperator("fileOutput", BytesFileOutputOperator.class);
++	// Add operators
++	KafkaSinglePortInputOperator kafkaInput = dag.addOperator("kafkaInput", KafkaSinglePortInputOperator.class);
++	BytesFileOutputOperator hdfsOutput = dag.addOperator("fileOutput", BytesFileOutputOperator.class);
 
-		// Add stream
-+		dag.addStream("Kafka2HDFS", kafkaInput.outputPort, hdfsOutput.input);
+	// Add stream
++	dag.addStream("Kafka2HDFS", kafkaInput.outputPort, hdfsOutput.input);
 ```
 Remove all other/older lines from the function.
 
@@ -152,15 +152,36 @@ SuperClass -> BaseOperator
 
 ### Pass through operator
 ```diff
-	public final transient DefaultInputPort<Object> input = new DefaultInputPort<Object>() {
-		@Override
-		public void process(Object tuple) {
-        output.emit((byte[])tuple)
-		}
-	};
-	public final transient DefaultOutputPort<byte[]> output = new DefaultOutputPort<byte[]>();
+    public final transient DefaultInputPort<Object> input = new DefaultInputPort<Object>() {
+        @Override
+        public void process(Object tuple) {
+	    output.emit((byte[])tuple)
+	}
+    };
+
+    public final transient DefaultOutputPort<byte[]> output = new DefaultOutputPort<byte[]>();
 ```
 
+### Update Application.java
+```diff
+  @Override
+  public void populateDAG(DAG dag, Configuration conf)
+  {
+
+    // Add operators
+    KafkaSinglePortInputOperator kafkaInput = dag.addOperator("kafkaInput", KafkaSinglePortInputOperator.class);
++   Dedup dedup = dag.addOperator("dedup", Dedup.class);
+    BytesFileOutputOperator hdfsOutput = dag.addOperator("fileOutput", BytesFileOutputOperator.class);
++   ConsoleOutputOperator console = dag.addOperator("console", ConsoleOutputOperator.class);
+
+    // Add stream
+-   dag.addStream("Kafka2HDFS", kafkaInput.outputPort, hdfsOutput.input);
++   dag.addStream("Kafka2Dedup", kafkaInput.outputPort, dedup.input);
++   dag.addStream("Dedup2HDFS", dedup.unique, hdfsOutput.input);
++   dag.addStream("Duplicate2Console", dedup.duplicate, console.input);
+  }
+
+```
 
 
 
