@@ -442,9 +442,19 @@ public class Dedup extends BaseOperator {
 ```
 
 ### Setting up parallel partition 
-
+```diff
 <property>
     <name>dt.operator.csvFormatter.port.in.attr.PARTITION_PARALLEL</name>
     <value>true</value>
-  </property>
-    
+  </property> 
+```
+
+### Autometrics
+Add following in the Dedup code
+```diff
+ @AutoMetric
+  int uniqueCount;
+ ```
+ Use a link similar to this to get the value:
+ 
+ http://host:9090/ws/v2/applications/application_1492158905793_0067/logicalPlan/operators/dedup/
