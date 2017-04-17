@@ -340,7 +340,62 @@ public class Dedup extends BaseOperator {
 }
 ```
 
-## Update Dedup.java with StreamCodec
+
+### Updated Application.java
+```diff
+  @Override
+  public void populateDAG(DAG dag, Configuration conf)
+  {
+
+    // Add operators
+    KafkaSinglePortInputOperator kafkaInputOperator = dag.addOperator("kafkaInput", KafkaSinglePortInputOperator.class);
+    CsvParser parser = dag.addOperator("csvParser", CsvParser.class);
+    Dedup dedup = dag.addOperator("dedup", Dedup.class);
+    CsvFormatter formatter = dag.addOperator("csvFormatter", CsvFormatter.class);
+    StringFileOutputOperator hdfsOutput = dag.addOperator("hdfsOutput", StringFileOutputOperator.class);
+    ConsoleOutputOperator console = dag.addOperator("toConsole", ConsoleOutputOperator.class);
+
+    // Connect operators.
+    dag.addStream("toParser", kafkaInputOperator.outputPort, parser.in);
+    dag.addStream("toDedup", parser.out, dedup.input);
+    dag.addStream("toFormatter", dedup.unique, formatter.in);
+    dag.addStream("toHDFS", formatter.out, hdfsOutput.input);
+    dag.addStream("toConsole", dedup.duplicate,console.input);
+  }
+```
+
+Run and show that all is working fine.
+
+## Update the Partition Count
+```diff
+  <property>
+    <name>dt.operator.dedup.attr.PARTITIONER</name>
+-    <value>com.datatorrent.common.partitioner.StatelessPartitioner:1</value>
++    <value>com.datatorrent.common.partitioner.StatelessPartitioner:2</value>
+  </property>
+  
+```
+There would be erros in deduplication. Some of the duplicate entries would be labelled as unique. Explain the root cause.
+
+### Add DedupStreamCodec.java
+extends KryoSerializableStreamCodec
+
+```diff
+public class DedupStreamCodec extends KryoSerializableStreamCodec<Object>
+{
+
+  private static final long serialVersionUID = -4051659018623778324L;
+
+  public int getPartition(Object t)
+  {
+    PojoEvent t1 = (PojoEvent)t;
+    return super.getPartition(t1.getAccountNumber());
+  }
+}
+```
+
+
+### Update Dedup.java with StreamCodec
 
 ```diff
 public class Dedup extends BaseOperator {
@@ -375,53 +430,4 @@ public class Dedup extends BaseOperator {
     
   };
 }
-```
-
-### Add DedupStreamCodec.java
-extends KryoSerializableStreamCodec
-
-```diff
-public class DedupStreamCodec extends KryoSerializableStreamCodec<Object>
-{
-
-  private static final long serialVersionUID = -4051659018623778324L;
-
-  public int getPartition(Object t)
-  {
-    PojoEvent t1 = (PojoEvent)t;
-    return super.getPartition(t1.getAccountNumber());
-  }
-}
-```
-
-### Updated Application.java
-```diff
-  @Override
-  public void populateDAG(DAG dag, Configuration conf)
-  {
-
-    // Add operators
-    KafkaSinglePortInputOperator kafkaInputOperator = dag.addOperator("kafkaInput", KafkaSinglePortInputOperator.class);
-    CsvParser parser = dag.addOperator("csvParser", CsvParser.class);
-    Dedup dedup = dag.addOperator("dedup", Dedup.class);
-    CsvFormatter formatter = dag.addOperator("csvFormatter", CsvFormatter.class);
-    StringFileOutputOperator hdfsOutput = dag.addOperator("hdfsOutput", StringFileOutputOperator.class);
-    ConsoleOutputOperator console = dag.addOperator("toConsole", ConsoleOutputOperator.class);
-
-    // Connect operators.
-    dag.addStream("toParser", kafkaInputOperator.outputPort, parser.in);
-    dag.addStream("toDedup", parser.out, dedup.input);
-    dag.addStream("toFormatter", dedup.unique, formatter.in);
-    dag.addStream("toHDFS", formatter.out, hdfsOutput.input);
-    dag.addStream("toConsole", dedup.duplicate,console.input);
-  }
-```
-## Update the Partition Count
-```diff
-  <property>
-    <name>dt.operator.dedup.attr.PARTITIONER</name>
--    <value>com.datatorrent.common.partitioner.StatelessPartitioner:1</value>
-+    <value>com.datatorrent.common.partitioner.StatelessPartitioner:2</value>
-  </property>
-  
 ```
