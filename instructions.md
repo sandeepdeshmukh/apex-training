@@ -223,5 +223,21 @@ public class Dedup extends BaseOperator
 
 ```
 
+## Add Parser and Formatter in the DAG
+Add following dependencies in pom.xml
+```diff
+    <dependency>
+      <groupId>org.apache.apex</groupId>
+      <artifactId>malhar-contrib</artifactId>
+      <version>${malhar.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>net.sf.supercsv</groupId>
+      <artifactId>super-csv</artifactId>
+      <version>2.4.0</version>
+      <optional>true</optional>
+    </dependency>
+```
+
 
 
