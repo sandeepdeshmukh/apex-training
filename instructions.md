@@ -366,3 +366,26 @@ public class DedupStreamCodec extends KryoSerializableStreamCodec<Object>
   }
 }
 ```
+
+### Updated Application.java
+```diff
+  @Override
+  public void populateDAG(DAG dag, Configuration conf)
+  {
+
+    // Add operators
+    KafkaSinglePortInputOperator kafkaInputOperator = dag.addOperator("kafkaInput", KafkaSinglePortInputOperator.class);
+    CsvParser parser = dag.addOperator("csvParser", CsvParser.class);
+    Dedup dedup = dag.addOperator("dedup", Dedup.class);
+    CsvFormatter formatter = dag.addOperator("csvFormatter", CsvFormatter.class);
+    StringFileOutputOperator hdfsOutput = dag.addOperator("hdfsOutput", StringFileOutputOperator.class);
+    ConsoleOutputOperator console = dag.addOperator("toConsole", ConsoleOutputOperator.class);
+
+    // Connect operators.
+    dag.addStream("toParser", kafkaInputOperator.outputPort, parser.in);
+    dag.addStream("toDedup", parser.out, dedup.input);
+    dag.addStream("toFormatter", dedup.unique, formatter.in);
+    dag.addStream("toHDFS", formatter.out, hdfsOutput.input);
+    dag.addStream("toConsole", dedup.duplicate,console.input);
+  }
+```
