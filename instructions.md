@@ -300,6 +300,7 @@ Add following in the properties.xml
   </property>
 ```
 
+## Create POJO file
 Create PojoEvent.java and generate getters/setters for all the fields and override toString method as follows
 ```diff
   private int accountNumber;
@@ -311,4 +312,57 @@ Create PojoEvent.java and generate getters/setters for all the fields and overri
   {
     return "PojoEvent: [accountNumber="+accountNumber + ", name="+name+ ", amount="+ amount +"]";
   }
+```
+
+### Update Dedup.java
+```diff
+public class Dedup extends BaseOperator {
+  
+  private DedupStreamCodec streamCodec;
+  private Set<Integer> set = new HashSet<Integer>();
+  public final transient DefaultOutputPort<Object> unique = new DefaultOutputPort<>();
+  public final transient DefaultOutputPort<Object> duplicate = new DefaultOutputPort<>();
+  
+  public final transient DefaultInputPort<Object> input = new DefaultInputPort<Object>() {
+
+    @Override
+    public void process(Object tuple) {
+      PojoEvent t = (PojoEvent)tuple;
+      if(set.contains(t.getAccountNumber())){
+        // not a unique
+        duplicate.emit(tuple);
+        return;
+      }
+      // Unique
+      unique.emit(tuple);
+      set.add(t.getAccountNumber());
+    }
+    
+    public com.datatorrent.api.StreamCodec<Object> getStreamCodec() {
+      
+      if(streamCodec == null){
+        streamCodec = new DedupStreamCodec();
+      }
+      return streamCodec;
+    };
+    
+  };
+}
+```
+
+### Add DedupStreamCodec.java
+extends KryoSerializableStreamCodec
+
+```diff
+public class DedupStreamCodec extends KryoSerializableStreamCodec<Object>
+{
+
+  private static final long serialVersionUID = -4051659018623778324L;
+
+  public int getPartition(Object t)
+  {
+    PojoEvent t1 = (PojoEvent)t;
+    return super.getPartition(t1.getAccountNumber());
+  }
+}
 ```
