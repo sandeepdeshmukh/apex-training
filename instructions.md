@@ -162,6 +162,8 @@ SuperClass -> BaseOperator
     public final transient DefaultOutputPort<byte[]> output = new DefaultOutputPort<byte[]>();
 ```
 
+You can ommit transient to start with which will fail the program. Explain participants why it is important to make it transient as well as final.
+
 ### Update Application.java
 ```diff
   @Override
