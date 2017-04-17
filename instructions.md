@@ -167,7 +167,6 @@ SuperClass -> BaseOperator
   @Override
   public void populateDAG(DAG dag, Configuration conf)
   {
-
     // Add operators
     KafkaSinglePortInputOperator kafkaInput = dag.addOperator("kafkaInput", KafkaSinglePortInputOperator.class);
 +   Dedup dedup = dag.addOperator("dedup", Dedup.class);
