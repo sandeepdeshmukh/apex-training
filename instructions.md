@@ -431,3 +431,20 @@ public class Dedup extends BaseOperator {
   };
 }
 ```
+### Setting locality
+
+```diff
+ 
+   <property>
+    <name>dt.stream.toParser.prop.locality</name>
+    <value>THREAD_LOCAL</value>
+  </property>
+```
+
+### Setting up parallel partition 
+
+<property>
+    <name>dt.operator.csvFormatter.port.in.attr.PARTITION_PARALLEL</name>
+    <value>true</value>
+  </property>
+    
