@@ -238,6 +238,77 @@ Add following dependencies in pom.xml
       <optional>true</optional>
     </dependency>
 ```
+Add following in the properties.xml
+```diff
+ <property>
+    <name>dt.operator.csvParser.prop.schema</name>
+    <value>{
+      "separator": "|",
+      "quoteChar": "\"",
+      "fields": [
+        {
+          "name": "accountNumber",
+          "type": "Integer"
+        },
+        {
+          "name": "name",
+          "type": "String"
+        },
+        {
+          "name": "amount",
+          "type": "Integer"
+        }
+      ]
+    }
+    </value>
+  </property>
+  <property>
+    <name>dt.operator.csvParser.port.out.attr.TUPLE_CLASS</name>
+    <value>com.example.myapexapp.PojoEvent</value>
+  </property>
+  <property>
+    <name>dt.operator.csvFormatter.prop.schema</name>
+    <value>{
+      "separator": "|",
+      "quoteChar": "\"",
+      "lineDelimiter": "",
+      "fields": [
+        {
+          "name": "accountNumber",
+          "type": "Integer"
+        },
+        {
+          "name": "name",
+          "type": "String"
+        },
+        {
+          "name": "amount",
+          "type": "Integer"
+        }
+      ]
+    }
+    </value>
+  </property>
+  <property>
+    <name>dt.operator.csvFormatter.port.in.attr.TUPLE_CLASS</name>
+    <value>com.example.myapexapp.PojoEvent</value>
+  </property>
+  
+  <property>
+    <name>dt.operator.dedup.attr.PARTITIONER</name>
+    <value>com.datatorrent.common.partitioner.StatelessPartitioner:1</value>
+  </property>
+```
 
-
-
+Create PojoEvent.java and generate getters/setters for all the fields and override toString method as follows
+```diff
+  private int accountNumber;
+  private String name;
+  private int amount;
+  
+  @Override
+  public String toString()
+  {
+    return "PojoEvent: [accountNumber="+accountNumber + ", name="+name+ ", amount="+ amount +"]";
+  }
+```
