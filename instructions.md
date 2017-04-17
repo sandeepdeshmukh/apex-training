@@ -184,5 +184,44 @@ You can ommit transient to start with which will fail the program. Explain parti
 
 ```
 
+### Update the Dedup.java file to include dedup logic
+```diff
+public class Dedup extends BaseOperator
+{
+  public final transient DefaultInputPort<Object> input = new DefaultInputPort<Object>()
+  {
+
+    @Override
+    public void process(Object tuple)
+    {
+-      output.emit((byte[])tuple)
++      processTuple(tuple);
+    }
+  };
+
++  HashSet<String> hashSet = new HashSet<String>();
+
++  protected void processTuple(Object tuple)
++  {
++    byte[] t = (byte[])tuple;
++    String str = new String(t);
++
++    if (hashSet.contains(str)) {
++      //Duplicate
++      duplicate.emit(t);
++    } else {
++      //Unique
++      hashSet.add(str);
++      unique.emit(t);
++    }
++  }
+
+-  public final transient DefaultOutputPort<byte[]> output = new DefaultOutputPort<byte[]>();
++  public final transient DefaultOutputPort<byte[]> unique = new DefaultOutputPort<byte[]>();
++  public final transient DefaultOutputPort<byte[]> duplicate = new DefaultOutputPort<byte[]>();
+}
+
+```
+
 
 
