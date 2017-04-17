@@ -314,7 +314,34 @@ Create PojoEvent.java and generate getters/setters for all the fields and overri
   }
 ```
 
-### Update Dedup.java
+### Update Dedup.java (without StreamCodec)
+```diff
+public class Dedup extends BaseOperator {
+  
+  private Set<Integer> set = new HashSet<Integer>();
+  public final transient DefaultOutputPort<Object> unique = new DefaultOutputPort<>();
+  public final transient DefaultOutputPort<Object> duplicate = new DefaultOutputPort<>();
+  
+  public final transient DefaultInputPort<Object> input = new DefaultInputPort<Object>() {
+
+    @Override
+    public void process(Object tuple) {
+      PojoEvent t = (PojoEvent)tuple;
+      if(set.contains(t.getAccountNumber())){
+        // not a unique
+        duplicate.emit(tuple);
+        return;
+      }
+      // Unique
+      unique.emit(tuple);
+      set.add(t.getAccountNumber());
+    } 
+  };
+}
+```
+
+## Update Dedup.java with StreamCodec
+
 ```diff
 public class Dedup extends BaseOperator {
   
@@ -388,4 +415,13 @@ public class DedupStreamCodec extends KryoSerializableStreamCodec<Object>
     dag.addStream("toHDFS", formatter.out, hdfsOutput.input);
     dag.addStream("toConsole", dedup.duplicate,console.input);
   }
+```
+## Update the Partition Count
+```diff
+  <property>
+    <name>dt.operator.dedup.attr.PARTITIONER</name>
+-    <value>com.datatorrent.common.partitioner.StatelessPartitioner:1</value>
++    <value>com.datatorrent.common.partitioner.StatelessPartitioner:2</value>
+  </property>
+  
 ```
